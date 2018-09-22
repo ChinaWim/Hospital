@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ming.hospital.dao.DoctorMapper" >
+  <resultMap id="BaseResultMap" type="com.ming.hospital.pojo.Doctor" >
+    <id column="did" property="did" jdbcType="BIGINT" />
+    <result column="dname" property="dname" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="VARCHAR" />
+    <result column="hid" property="hid" jdbcType="BIGINT" />
+    <result column="score" property="score" jdbcType="REAL" />
+    <result column="grade" property="grade" jdbcType="INTEGER" />
+    <result column="deid" property="deid" jdbcType="BIGINT" />
+    <result column="skill" property="skill" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="image" property="image" jdbcType="VARCHAR" />
+    <result column="surgeryWeek" property="surgeryweek" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="resultMapDoctor" type="com.ming.hospital.pojo.Doctor">
+    <id column="did" property="did" />
+    <result  column="dname" property="dname"/>
+    <result  column="gender" property="gender"/>
+    <result  column="score" property="score"/>
+    <result  column="grade" property="grade"/>
+    <result  column="skill" property="skill"/>
+    <result  column="description" property="description"/>
+    <result  column="image" property="image"/>
+    <result  column="surgeryWeek" property="surgeryweek"/>
+    <association property="hospital" javaType="hospital">
+      <id property="hid" column="hid"></id>
+      <result property="hname" column="hname"></result>
+      <result property="hphone" column="hphone"></result>
+      <result property="address" column="address"></result>
+      <result property="score" column="score"></result>
+      <result property="grade" column="grade"></result>
+      <result property="description" column="description"></result>
+      <result property="insurance" column="insurance"></result>
+      <result property="image" column="image"></result>
+    </association>
+
+    <association property="dept" javaType="dept">
+      <id property="deid" column="deid"></id>
+      <result property="degrade" column="degrade"></result>
+      <result property="dename" column="dename" ></result>
+    </association>
+  </resultMap>
+
+  <select  id = "getListByTop4" resultMap="resultMapDoctor" >
+      select * from doctor d JOIN  hospital h on d.hid = h.hid join dept de on de.deid = d.deid
+      order by d.score limit 0,4;
+    </select>
+
+  <select id="selectById" resultMap="resultMapDoctor" parameterType="Long">
+    select * from doctor d JOIN  hospital h on d.hid = h.hid join dept de on de.deid = d.deid
+    where d.did = #{did};
+  </select>
+
+  <select id="selectToPage" parameterType="com.ming.hospital.dto.DoctorPage" resultMap="resultMapDoctor">
+    select * from doctor d JOIN  hospital h on d.hid = h.hid join dept de on de.deid = d.deid
+    <where>
+      <if test="deid != null ">
+        d.deid = #{deid}
+      </if>
+      <if test="grade != null ">
+        and d.grade = #{grade}
+      </if>
+      <if test="hid != null ">
+        and h.hid = #{hid}
+      </if>
+      <if test="key != null and key != '' ">
+        and  d.`dname` LIKE '%${key}%' OR hname LIKE '%${key}%'  OR  dename LIKE '%${key}%' OR skill LIKE '%${key}%'
+      </if>
+    </where>
+    limit #{pageNum},#{pageSize};
+  </select>
+
+  <select id="selectToPageTotalCount" parameterType="com.ming.hospital.dto.DoctorPage" resultType="Integer">
+    select count(1) from doctor d JOIN  hospital h on d.hid = h.hid join dept de on de.deid = d.deid
+    <where>
+      <if test="deid != null ">
+        d.deid = #{deid}
+      </if>
+      <if test="grade != null ">
+        and d.grade = #{grade}
+      </if>
+      <if test="hid != null ">
+        and h.hid = #{hid}
+      </if>
+      <if test="key != null and key != '' ">
+        and  d.`dname` LIKE '%${key}%' OR hname LIKE '%${key}%'  OR  dename LIKE '%${key}%' OR skill LIKE '%${key}%'
+      </if>
+    </where>
+  </select>
+
+
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    did, dname, gender, hid, score, grade, deid, skill, description, image, surgeryWeek
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ming.hospital.pojo.DoctorExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from doctor
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from doctor
+    where did = #{did,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from doctor
+    where did = #{did,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ming.hospital.pojo.DoctorExample" >
+    delete from doctor
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ming.hospital.pojo.Doctor" >
+    insert into doctor (did, dname, gender, 
+      hid, score, grade, deid, 
+      skill, description, image, 
+      surgeryWeek)
+    values (#{did,jdbcType=BIGINT}, #{dname,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR}, 
+      #{hid,jdbcType=BIGINT}, #{score,jdbcType=REAL}, #{grade,jdbcType=INTEGER}, #{deid,jdbcType=BIGINT}, 
+      #{skill,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{image,jdbcType=VARCHAR}, 
+      #{surgeryweek,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ming.hospital.pojo.Doctor" >
+    insert into doctor
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="did != null" >
+        did,
+      </if>
+      <if test="dname != null" >
+        dname,
+      </if>
+      <if test="gender != null" >
+        gender,
+      </if>
+      <if test="hid != null" >
+        hid,
+      </if>
+      <if test="score != null" >
+        score,
+      </if>
+      <if test="grade != null" >
+        grade,
+      </if>
+      <if test="deid != null" >
+        deid,
+      </if>
+      <if test="skill != null" >
+        skill,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="image != null" >
+        image,
+      </if>
+      <if test="surgeryweek != null" >
+        surgeryWeek,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="did != null" >
+        #{did,jdbcType=BIGINT},
+      </if>
+      <if test="dname != null" >
+        #{dname,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="hid != null" >
+        #{hid,jdbcType=BIGINT},
+      </if>
+      <if test="score != null" >
+        #{score,jdbcType=REAL},
+      </if>
+      <if test="grade != null" >
+        #{grade,jdbcType=INTEGER},
+      </if>
+      <if test="deid != null" >
+        #{deid,jdbcType=BIGINT},
+      </if>
+      <if test="skill != null" >
+        #{skill,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null" >
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="surgeryweek != null" >
+        #{surgeryweek,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ming.hospital.pojo.DoctorExample" resultType="java.lang.Integer" >
+    select count(*) from doctor
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update doctor
+    <set >
+      <if test="record.did != null" >
+        did = #{record.did,jdbcType=BIGINT},
+      </if>
+      <if test="record.dname != null" >
+        dname = #{record.dname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gender != null" >
+        gender = #{record.gender,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hid != null" >
+        hid = #{record.hid,jdbcType=BIGINT},
+      </if>
+      <if test="record.score != null" >
+        score = #{record.score,jdbcType=REAL},
+      </if>
+      <if test="record.grade != null" >
+        grade = #{record.grade,jdbcType=INTEGER},
+      </if>
+      <if test="record.deid != null" >
+        deid = #{record.deid,jdbcType=BIGINT},
+      </if>
+      <if test="record.skill != null" >
+        skill = #{record.skill,jdbcType=VARCHAR},
+      </if>
+      <if test="record.description != null" >
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.image != null" >
+        image = #{record.image,jdbcType=VARCHAR},
+      </if>
+      <if test="record.surgeryweek != null" >
+        surgeryWeek = #{record.surgeryweek,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update doctor
+    set did = #{record.did,jdbcType=BIGINT},
+    dname = #{record.dname,jdbcType=VARCHAR},
+    gender = #{record.gender,jdbcType=VARCHAR},
+    hid = #{record.hid,jdbcType=BIGINT},
+    score = #{record.score,jdbcType=REAL},
+    grade = #{record.grade,jdbcType=INTEGER},
+    deid = #{record.deid,jdbcType=BIGINT},
+    skill = #{record.skill,jdbcType=VARCHAR},
+    description = #{record.description,jdbcType=VARCHAR},
+    image = #{record.image,jdbcType=VARCHAR},
+    surgeryWeek = #{record.surgeryweek,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ming.hospital.pojo.Doctor" >
+    update doctor
+    <set >
+      <if test="dname != null" >
+        dname = #{dname,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        gender = #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="hid != null" >
+        hid = #{hid,jdbcType=BIGINT},
+      </if>
+      <if test="score != null" >
+        score = #{score,jdbcType=REAL},
+      </if>
+      <if test="grade != null" >
+        grade = #{grade,jdbcType=INTEGER},
+      </if>
+      <if test="deid != null" >
+        deid = #{deid,jdbcType=BIGINT},
+      </if>
+      <if test="skill != null" >
+        skill = #{skill,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null" >
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="surgeryweek != null" >
+        surgeryWeek = #{surgeryweek,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where did = #{did,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ming.hospital.pojo.Doctor" >
+    update doctor
+    set dname = #{dname,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=VARCHAR},
+      hid = #{hid,jdbcType=BIGINT},
+      score = #{score,jdbcType=REAL},
+      grade = #{grade,jdbcType=INTEGER},
+      deid = #{deid,jdbcType=BIGINT},
+      skill = #{skill,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      image = #{image,jdbcType=VARCHAR},
+      surgeryWeek = #{surgeryweek,jdbcType=VARCHAR}
+    where did = #{did,jdbcType=BIGINT}
+  </update>
+</mapper>

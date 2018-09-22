@@ -1,0 +1,173 @@
+/*重置默认的外边距和内边距*/
+*{
+    margin:0;
+    padding:0;
+}
+/*常用标签的样式重置*/
+i{
+    font-style: normal;
+}
+a{
+    text-decoration: none;
+}
+input{
+    outline: none;
+    border:none;
+}
+/*设定html和body的宽度为100%*/
+html,body{
+    width:100%;
+    font-size: 14px;
+}
+/*版心*/
+.container{
+    width:1210px;
+    margin:0 auto;
+    
+}
+/*头部*/
+.header{
+    width:100%;
+    height: 110px;
+    box-shadow: 10px 10px 10px rgba(111,111,111,.5);
+    position: relative;
+
+}
+/*Logo*/
+.header .logo{
+    display: inline-block;
+    width: 160px;
+    height:50px;
+    background: url("../images/icon.png") no-repeat;
+    position: absolute;
+    top:20px;
+    left:20px;
+}
+.header .desc{
+    font-size: 18px;
+    line-height: 34px;
+    border-left: 1px solid #ccc;
+    position: absolute;
+    left: 200px;
+    top:28px;
+    padding-left: 20px;
+    font-weight:bold;
+}
+/*-----------------------------------注册模块---------------------------*/
+.register{
+	width: 400px;
+	margin: 0 auto;
+	padding-top:40px;
+	position: relative;
+}
+/*包裹表单项和对应的提示信息的容器的样式设置*/
+.register-box{
+	width:100%;
+	height: 37px;
+	padding-bottom: 30px;
+}
+/*表单项样式设置*/
+.register-box .box{
+	width:100%;
+	height:100%;
+	line-height: 37px;
+	padding-left: 10px;
+	border: 1px solid #ccc;
+	position: relative;
+}
+.register-box .box.error{
+	border:1px solid red;
+}
+.register-box .box input{
+	width:200px;
+	font-size:16px;
+	padding-left: 20px;
+}
+/*验证通过*/
+.register-box .box.right i{
+	width:20px;
+	height: 20px;
+	background: url(../images/right.png) no-repeat center center;
+	position: absolute;
+	top:50%;
+	margin-top: -10px;
+	right: 10px;
+	
+}
+/*提示信息样式设置*/
+.register-box .tip {
+	width:100%;
+	line-height: 30px;
+	font-size: 12px;
+}
+.register-box .tip i{
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	vertical-align: middle;
+}
+.register-box .tip span{
+	color: #CCCCCC;
+}
+/*提示信息隐藏样式*/
+.register-box .tip.hide{
+	display: none;
+}
+/*提示信息默认样式*/
+.register-box .tip.default i {
+	background: url(../images/default.png) no-repeat center center;
+}
+.register-box .tip.default span{
+	color: #ccc;
+}
+/*提示信息错误样式*/
+.register-box .tip.error i {
+	background: url(../images/error.png) no-repeat center center;
+}
+.register-box .tip.error span{
+	color: red;
+}
+/*提示信息密码弱*/
+.register-box .tip.ruo i {
+	background: url(../images/ruo.png) no-repeat center center;
+}
+/*提示信息密码中*/
+.register-box .tip.zhong i {
+	background: url(../images/zhong.png) no-repeat center center;
+}
+/*提示信息密码中*/
+.register-box .tip.qiang i {
+	background: url(../images/qiang.png) no-repeat center center;
+}
+/*用户注册协议*/
+.register-box.xieyi{
+	width:100%;
+	height: 20px;
+	padding-bottom: 30px;
+/*	background-color: #ccc;*/
+}
+.register-box.xieyi .box{
+	line-height: normal;
+	padding: 0;
+	border: none;
+}
+.register-box.xieyi .box.error{
+	line-height: normal;
+	padding: 0;
+	border: 1px solid red;
+}
+.register-box.xieyi .box input{
+	width: auto;
+}
+/*注册*/
+.register button{
+	width: 100%;
+	height: 40px;
+	font:bold 18px/40px "宋体";
+	color: white;
+	background-color: darkred;
+	outline-color: white;
+}
+.register button:hover{
+	background-color: red;
+}

@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ming.hospital.dao.AppointmentMapper" >
+  <resultMap id="BaseResultMap" type="com.ming.hospital.pojo.Appointment" >
+    <id column="aid" property="aid" jdbcType="BIGINT" />
+    <result column="uid" property="uid" jdbcType="BIGINT" />
+    <result column="visitTime" property="visittime" jdbcType="VARCHAR" />
+    <result column="did" property="did" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="idcast" property="idcast" jdbcType="VARCHAR" />
+    <result column="aphone" property="aphone" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <select id="selectTimesFromHospital" parameterType="long" resultType="int">
+    select    count(1) from appointment a left  join doctor d on a.did = d.did
+    where hid = #{hid}
+  </select>
+
+
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    aid, uid, visitTime, did, name, idcast, aphone, createtime, updatetime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ming.hospital.pojo.AppointmentExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from appointment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from appointment
+    where aid = #{aid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from appointment
+    where aid = #{aid,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ming.hospital.pojo.AppointmentExample" >
+    delete from appointment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ming.hospital.pojo.Appointment" >
+    insert into appointment (aid, uid, visitTime,
+    did, name, idcast, aphone,
+    createtime, updatetime)
+    values (#{aid,jdbcType=BIGINT}, #{uid,jdbcType=BIGINT}, #{visittime,jdbcType=VARCHAR},
+    #{did,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{idcast,jdbcType=VARCHAR}, #{aphone,jdbcType=VARCHAR},
+    #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ming.hospital.pojo.Appointment" >
+    insert into appointment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="aid != null" >
+        aid,
+      </if>
+      <if test="uid != null" >
+        uid,
+      </if>
+      <if test="visittime != null" >
+        visitTime,
+      </if>
+      <if test="did != null" >
+        did,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="idcast != null" >
+        idcast,
+      </if>
+      <if test="aphone != null" >
+        aphone,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="updatetime != null" >
+        updatetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="aid != null" >
+        #{aid,jdbcType=BIGINT},
+      </if>
+      <if test="uid != null" >
+        #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="visittime != null" >
+        #{visittime,jdbcType=VARCHAR},
+      </if>
+      <if test="did != null" >
+        #{did,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="idcast != null" >
+        #{idcast,jdbcType=VARCHAR},
+      </if>
+      <if test="aphone != null" >
+        #{aphone,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ming.hospital.pojo.AppointmentExample" resultType="java.lang.Integer" >
+    select count(*) from appointment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update appointment
+    <set >
+      <if test="record.aid != null" >
+        aid = #{record.aid,jdbcType=BIGINT},
+      </if>
+      <if test="record.uid != null" >
+        uid = #{record.uid,jdbcType=BIGINT},
+      </if>
+      <if test="record.visittime != null" >
+        visitTime = #{record.visittime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.did != null" >
+        did = #{record.did,jdbcType=BIGINT},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.idcast != null" >
+        idcast = #{record.idcast,jdbcType=VARCHAR},
+      </if>
+      <if test="record.aphone != null" >
+        aphone = #{record.aphone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createtime != null" >
+        createtime = #{record.createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatetime != null" >
+        updatetime = #{record.updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update appointment
+    set aid = #{record.aid,jdbcType=BIGINT},
+    uid = #{record.uid,jdbcType=BIGINT},
+    visitTime = #{record.visittime,jdbcType=VARCHAR},
+    did = #{record.did,jdbcType=BIGINT},
+    name = #{record.name,jdbcType=VARCHAR},
+    idcast = #{record.idcast,jdbcType=VARCHAR},
+    aphone = #{record.aphone,jdbcType=VARCHAR},
+    createtime = #{record.createtime,jdbcType=TIMESTAMP},
+    updatetime = #{record.updatetime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ming.hospital.pojo.Appointment" >
+    update appointment
+    <set >
+      <if test="uid != null" >
+        uid = #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="visittime != null" >
+        visitTime = #{visittime,jdbcType=VARCHAR},
+      </if>
+      <if test="did != null" >
+        did = #{did,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="idcast != null" >
+        idcast = #{idcast,jdbcType=VARCHAR},
+      </if>
+      <if test="aphone != null" >
+        aphone = #{aphone,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where aid = #{aid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ming.hospital.pojo.Appointment" >
+    update appointment
+    set uid = #{uid,jdbcType=BIGINT},
+      visitTime = #{visittime,jdbcType=VARCHAR},
+      did = #{did,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+      idcast = #{idcast,jdbcType=VARCHAR},
+      aphone = #{aphone,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP}
+    where aid = #{aid,jdbcType=BIGINT}
+  </update>
+</mapper>
